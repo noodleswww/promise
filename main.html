@@ -3,8 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <script src="//cdnjscn.b0.upaiyun.com/libs/jquery/2.1.1/jquery.js"></script>
+    <script src="js/lib/jquery.transit.min.js"></script>
+    <style>
+        body {
+            background: #755E5E;
+        }
+
+        div {
+            width: 500px;
+            height: 100px;
+            margin: 20px;
+            line-height: 100px;
+            text-align: center;
+            font-size: 23px;
+        }
+
+        .div1 {
+            background: #E6C7CC;
+        }
+
+        .div2 {
+            background: sienna;
+        }
+
+        .div3 {
+            background: peru;
+        }
+
+        .div4 {
+            background: #83D4B9;
+        }
+
+        button {
+            position: absolute;
+            bottom: 20px;
+            left: 50px;
+        }
+    </style>
 </head>
 <body>
 
+
+<div class="div1">div1</div>
+<div class="div2">div2</div>
+<div class="div3">div3</div>
+<div class="div4">div4</div>
+
+<button>开始</button>
+
+<script src="js/Promise.js"></script>
+<script src="js/Deferred.js"></script>
+<script>
+    //index.html方法，需要对每个run方法进行封装，
+    //现在使用一个代理函数，根据需要生成不同promise
+
+    var proxy = function (ele, method) {
+        return function () {
+            var deferred = new Deferred();
+            var args = Array.prototype.slice.call(arguments);
+            args.push(deferred.callback());
+            method.apply(ele, args);
+            return deferred.promise;
+        }
+    };
+    var $div1 = $('.div1'),
+            $div2 = $('.div2'),
+            $div3 = $('.div3'),
+            $div4 = $('.div4');
+    //通过proxy方法，只需简单的一行代码即可创建一个promise
+    //此处为动画效果封装，所以需要根据不同的元素创建相应的动画效果
+    var run11 = proxy($div1, $div1.transition);
+    var run22 = proxy($div2, $div2.transition);
+    var run33 = proxy($div3, $div3.transition);
+    var run44 = proxy($div4, $div4.transition);
+    run11({width: '250px', backgroundColor: '#985C66'}, 3000).then(function () {
+        console.log('smooth div1');
+        $div1.html('smooth div1');
+        return run22({width: '250px', backgroundColor: '#985C66'}, 3000)
+    }).then(function () {
+        console.log('smooth div2');
+        $div2.html('smooth div2');
+        return run33({width: '250px', backgroundColor: '#985C66'}, 3000)
+    }).then(function () {
+        console.log('smooth div3');
+        $div3.html('smooth div3');
+        return run44({width: '250px', backgroundColor: '#985C66'}, 3000)
+    }).then(function () {
+        console.log('smooth div4');
+        $div4.html('smooth div4');
+    });
+</script>
 </body>
 </html>

@@ -3,8 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <script src="//cdnjscn.b0.upaiyun.com/libs/jquery/2.1.1/jquery.js"></script>
+    <script src="js/lib/jquery.transit.min.js"></script>
+    <style>
+        body {
+            background: #755E5E;
+        }
+
+        div {
+            width: 500px;
+            height: 100px;
+            margin: 20px;
+            line-height: 100px;
+            text-align: center;
+            font-size: 23px;
+        }
+
+        .div1 {
+            background: #E6C7CC;
+        }
+
+        .div2 {
+            background: sienna;
+        }
+
+        .div3 {
+            background: peru;
+        }
+
+        .div4 {
+            background: #83D4B9;
+        }
+
+        button {
+            position: absolute;
+            bottom: 20px;
+            left: 50px;
+        }
+    </style>
 </head>
 <body>
 
+
+<div class="div1">div1</div>
+<div class="div2">div2</div>
+<div class="div3">div3</div>
+<div class="div4">div4</div>
+
+<button>开始</button>
+
+<script src="js/Promise.js"></script>
+<script src="js/Deferred.js"></script>
+<script>
+    var run1 = function (options, time) {
+        var deferred = new Deferred();
+        $('.div1').transition(options, time, 'linear', deferred.callback());
+        return deferred.promise;
+    };
+    var run2 = function (optios, time) {
+        var deferred = new Deferred();
+        $('.div2').transition(optios, time, 'linear', deferred.callback());
+        return deferred.promise;
+    };
+    var run3 = function (optios, time) {
+        var deferred = new Deferred();
+        $('.div3').transition(optios, time, 'linear', deferred.callback());
+        return deferred.promise;
+    };
+    var run4 = function (optios, time) {
+        var deferred = new Deferred();
+        $('.div4').transition(optios, time, 'linear', deferred.callback());
+        return deferred.promise;
+    };
+    $('button').click(function () {
+        //使用封装后的模式，串行执行每个div的动画效果
+        run1({width: '250px', backgroundColor: '#985C66'}, 3000)
+                .then(function () {
+                    console.log('div1执行完毕');
+                    return run2({width: '250px', backgroundColor: '#985C66'}, 3000)
+                }).then(function () {
+                    console.log('div2执行完毕');
+                    return run3({width: '250px', backgroundColor: '#985C66'}, 3000)
+                }).then(function () {
+                    console.log('div3执行完毕');
+                    return run4({width: '250px', backgroundColor: '#985C66'}, 3000)
+                }).then(function () {
+                    console.log('div4执行完毕');
+                });
+    });
+
+</script>
 </body>
 </html>
